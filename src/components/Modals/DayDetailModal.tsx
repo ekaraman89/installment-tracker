@@ -24,6 +24,32 @@ export function DayDetailModal({ date, payments, cards, onClose }: DayDetailModa
   // Create a map of card IDs to cards for quick lookup
   const cardMap = new Map(cards.map(card => [card.id, card]));
   
+  // Group payments by card (bank)
+  const paymentsByCard = payments.reduce((groups, payment) => {
+    const cardId = payment.cardId;
+    if (!groups[cardId]) {
+      groups[cardId] = [];
+    }
+    groups[cardId].push(payment);
+    return groups;
+  }, {} as Record<string, InstallmentPayment[]>);
+  
+  // Calculate totals per card
+  const cardTotals = Object.entries(paymentsByCard).map(([cardId, cardPayments]) => {
+    const card = cardMap.get(cardId);
+    const cardName = card?.name || '[Silinmiş Kart]';
+    const cardColor = card?.color || '#6B7280';
+    const total = cardPayments.reduce((sum, payment) => sum + payment.amount, 0);
+    
+    return {
+      cardId,
+      cardName,
+      cardColor,
+      payments: cardPayments,
+      total
+    };
+  }).sort((a, b) => b.total - a.total); // Sort by total amount descending
+  
   // Handle outside click
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -99,44 +125,57 @@ export function DayDetailModal({ date, payments, cards, onClose }: DayDetailModa
               <p className="text-gray-600">Bu günde ödeme bulunmamaktadır</p>
             </div>
           ) : (
-            <div className="space-y-3" role="list" aria-label="Günlük ödemeler">
-              {payments.map((payment, index) => {
-                const card = cardMap.get(payment.cardId);
-                const cardName = card?.name || '[Silinmiş Kart]';
-                const cardColor = card?.color || '#6B7280';
-                
-                return (
-                  <div
-                    key={`${payment.installmentId}-${payment.installmentNumber}-${index}`}
-                    className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200"
-                    role="listitem"
-                  >
-                    {/* Card color indicator */}
-                    <div
-                      className="w-4 h-4 rounded-full flex-shrink-0 shadow-sm"
-                      style={{ backgroundColor: cardColor }}
-                      aria-hidden="true"
-                    />
-                    
-                    {/* Payment details */}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900 truncate">
-                        {cardName}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        Taksit {payment.installmentNumber}/{payment.totalInstallments}
-                      </p>
-                    </div>
-                    
-                    {/* Amount */}
-                    <div className="text-right flex-shrink-0">
-                      <p className="font-semibold text-gray-900">
-                        {formatCurrency(payment.amount)}
-                      </p>
+            <div className="space-y-4" role="list" aria-label="Banka bazında ödemeler">
+              {cardTotals.map((cardGroup) => (
+                <div key={cardGroup.cardId} className="border border-gray-200 rounded-lg overflow-hidden">
+                  {/* Card Header with Total */}
+                  <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="w-4 h-4 rounded-full flex-shrink-0 shadow-sm"
+                          style={{ backgroundColor: cardGroup.cardColor }}
+                          aria-hidden="true"
+                        />
+                        <h3 className="font-semibold text-gray-900">
+                          {cardGroup.cardName}
+                        </h3>
+                      </div>
+                      <span className="font-bold text-blue-600">
+                        {formatCurrency(cardGroup.total)}
+                      </span>
                     </div>
                   </div>
-                );
-              })}
+                  
+                  {/* Card Payments */}
+                  <div className="divide-y divide-gray-100">
+                    {cardGroup.payments.map((payment, index) => (
+                      <div
+                        key={`${payment.installmentId}-${payment.installmentNumber}-${index}`}
+                        className="flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors duration-200"
+                        role="listitem"
+                      >
+                        {/* Payment details */}
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-gray-900 truncate">
+                            {payment.description || `Taksit ${payment.installmentNumber}/${payment.totalInstallments}`}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Taksit {payment.installmentNumber}/{payment.totalInstallments}
+                          </p>
+                        </div>
+                        
+                        {/* Amount */}
+                        <div className="text-right flex-shrink-0">
+                          <p className="font-semibold text-gray-900">
+                            {formatCurrency(payment.amount)}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>

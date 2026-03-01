@@ -1,5 +1,6 @@
 import { addMonths, addDays, format, getDaysInMonth as dateFnsGetDaysInMonth, isSameDay as dateFnsIsSameDay } from 'date-fns';
 import { isHoliday } from './holidayCalendar';
+import type { InstallmentPayment } from '../store/types';
 
 /**
  * Check if a date is a business day (not weekend and not a holiday)
@@ -101,18 +102,6 @@ export function calculateManualPaymentDate(paymentDay: number, month: Date): Dat
 }
 
 /**
- * Interface for installment payment information
- */
-export interface InstallmentPayment {
-  installmentId: string;
-  cardId: string;
-  amount: number;
-  dueDate: Date;
-  installmentNumber: number;
-  totalInstallments: number;
-}
-
-/**
  * Generate payment schedule for an installment
  * @param installmentId - ID of the installment
  * @param cardId - ID of the card
@@ -120,6 +109,7 @@ export interface InstallmentPayment {
  * @param installmentCount - Number of installments
  * @param amountPerInstallment - Amount per installment
  * @param startMonth - The month to start payments from
+ * @param description - Description of the installment
  * @returns Array of installment payments
  */
 export function generatePaymentSchedule(
@@ -128,7 +118,8 @@ export function generatePaymentSchedule(
   card: { type: 'credit_card' | 'manual'; billingCycleDate?: number; paymentDay?: number },
   installmentCount: number,
   amountPerInstallment: number,
-  startMonth?: Date
+  startMonth?: Date,
+  description?: string
 ): InstallmentPayment[] {
   const payments: InstallmentPayment[] = [];
   const baseMonth = startMonth || new Date();
@@ -156,6 +147,7 @@ export function generatePaymentSchedule(
       dueDate,
       installmentNumber: i + 1,
       totalInstallments: installmentCount,
+      description,
     });
   }
   

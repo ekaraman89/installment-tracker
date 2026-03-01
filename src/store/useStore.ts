@@ -171,7 +171,8 @@ export const useStore = create<StoreState>()(
             card,
             installment.installmentCount,
             amountPerInstallment,
-            installment.startMonth
+            installment.startMonth,
+            installment.description
           );
           
           // Filter payments that fall within the requested month
@@ -211,7 +212,8 @@ export const useStore = create<StoreState>()(
             card,
             installment.installmentCount,
             amountPerInstallment,
-            installment.startMonth
+            installment.startMonth,
+            installment.description
           );
           
           // Filter payments that fall on the requested day

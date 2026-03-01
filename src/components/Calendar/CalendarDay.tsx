@@ -19,6 +19,8 @@ export function CalendarDay({ date, payments, cards, isToday, onClick }: Calenda
   // Calculate total amount for this day
   const totalAmount = payments.reduce((sum, payment) => sum + payment.amount, 0);
   
+  const hasPayments = payments.length > 0;
+  
   // Get unique card colors for this day
   const cardColors = payments
     .map(payment => {
@@ -27,7 +29,14 @@ export function CalendarDay({ date, payments, cards, isToday, onClick }: Calenda
     })
     .filter((color, index, self) => self.indexOf(color) === index); // unique colors
   
-  const hasPayments = payments.length > 0;
+  // Create tooltip text with payment descriptions
+  const tooltipText = hasPayments 
+    ? `${formatDate(date)}: ${formatCurrency(totalAmount)}\n${payments.map(p => {
+        const card = cards.find(c => c.id === p.cardId);
+        const cardName = card?.name || '[Silinmiş Kart]';
+        return `• ${p.description || cardName} (${p.installmentNumber}/${p.totalInstallments})`;
+      }).join('\n')}`
+    : formatDate(date);
   
   return (
     <button
@@ -40,7 +49,7 @@ export function CalendarDay({ date, payments, cards, isToday, onClick }: Calenda
         ${isToday ? 'bg-blue-50 border-blue-400 ring-2 ring-blue-300' : 'bg-white border-gray-200'}
         ${hasPayments ? 'font-semibold' : ''}
       `}
-      title={hasPayments ? `${formatDate(date)}: ${formatCurrency(totalAmount)}` : formatDate(date)}
+      title={tooltipText}
       aria-label={`${formatDate(date)}${hasPayments ? `, ${formatCurrency(totalAmount)} ödeme` : ', ödeme yok'}`}
     >
       {/* Day number */}

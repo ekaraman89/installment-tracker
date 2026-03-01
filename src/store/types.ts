@@ -35,6 +35,10 @@ export interface Installment {
  * InstallmentPayment interface representing a single payment in an installment schedule
  * Used for calendar display and payment tracking
  */
+export /**
+ * InstallmentPayment interface representing a single payment in an installment schedule
+ * Used for calendar display and payment tracking
+ */
 export interface InstallmentPayment {
   installmentId: string;
   cardId: string;
@@ -42,6 +46,7 @@ export interface InstallmentPayment {
   dueDate: Date;
   installmentNumber: number; // e.g., 3 of 12
   totalInstallments: number;
+  description?: string; // Taksit açıklaması
 }
 
 /**
