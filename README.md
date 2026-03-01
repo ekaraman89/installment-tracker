@@ -1,105 +1,152 @@
-# Taksit Takip Uygulaması
+# 💳 Installment Tracker
 
-Kredi kartı taksitlerini görsel bir takvim üzerinde takip etmenizi sağlayan React + TypeScript uygulaması.
+A modern React + TypeScript application for tracking credit card installments with a visual calendar interface.
 
-## Özellikler
+[🇹🇷 Türkçe](README_TR.md) | [🇬🇧 English](#english)
 
-- 🎯 Kredi kartı yönetimi
-- 📅 Aylık takvim görünümü
-- 💰 Taksitli harcama takibi
-- 🎨 Kart bazlı renk kodlama
-- 🔍 Kart filtreleme
-- 💾 LocalStorage ile veri kalıcılığı
-- 🐳 Docker desteği
+---
 
-## Teknolojiler
+## 🌟 Features
 
-- React 18
-- TypeScript
-- Vite
-- Tailwind CSS
-- Zustand (State Management)
-- date-fns (Tarih işlemleri)
-- fast-check (Property-based testing)
-- Vitest (Testing)
+- 🎯 **Credit Card Management** - Add, edit, and organize your credit cards
+- 📅 **Calendar View** - Visual monthly calendar showing all payments
+- 💰 **Installment Tracking** - Track installment payments with detailed information
+- 🎨 **Color Coding** - Each card has its unique color for easy identification
+- 🔍 **Smart Filtering** - Filter payments by specific cards
+- 💾 **Data Persistence** - All data saved locally in your browser
+- 📱 **Responsive Design** - Works perfectly on desktop and mobile
+- 🐳 **Docker Support** - Easy deployment with Docker
 
-## Kurulum
+## 🚀 Demo
 
-### Yerel Geliştirme
+![Installment Tracker Demo](https://via.placeholder.com/800x400?text=Demo+Screenshot)
+
+*Add a screenshot of your application here*
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React 18, TypeScript, Vite
+- **Styling**: Tailwind CSS
+- **State Management**: Zustand
+- **Date Handling**: date-fns
+- **Testing**: Vitest, fast-check (Property-based testing)
+- **Deployment**: Docker, Nginx
+
+## 📦 Installation
+
+### Prerequisites
+
+- Node.js 18+ 
+- npm or yarn
+
+### Local Development
 
 ```bash
-# Bağımlılıkları yükle
+# Clone the repository
+git clone https://github.com/ekaraman89/installment-tracker.git
+cd installment-tracker
+
+# Install dependencies
 npm install
 
-# Geliştirme sunucusunu başlat
+# Start development server
 npm run dev
 
-# Testleri çalıştır
+# Run tests
 npm test
 
-# Production build
+# Build for production
 npm run build
 ```
 
-### Docker ile Çalıştırma
+### 🐳 Docker Deployment
 
-#### Geliştirme Ortamı
+#### Development Environment
 
 ```bash
-# Geliştirme container'ını başlat
+# Start development container
 docker-compose up dev
 
-# Uygulama http://localhost:5173 adresinde çalışacak
+# Application will be available at http://localhost:5173
 ```
 
 #### Production Build
 
 ```bash
-# Production container'ını build et ve başlat
+# Build and start production container
 docker-compose up app
 
-# Uygulama http://localhost:3000 adresinde çalışacak
+# Application will be available at http://localhost:3000
 ```
 
-## Proje Yapısı
+## 📁 Project Structure
 
 ```
 src/
 ├── components/
-│   ├── Calendar/       # Takvim bileşenleri
-│   ├── Cards/          # Kart yönetimi bileşenleri
-│   ├── Installments/   # Taksit yönetimi bileşenleri
-│   ├── Modals/         # Modal bileşenleri
-│   └── Dashboard/      # Dashboard bileşenleri
+│   ├── Calendar/       # Calendar components
+│   ├── Cards/          # Card management components
+│   ├── Installments/   # Installment management components
+│   ├── Modals/         # Modal components
+│   └── Dashboard/      # Dashboard components
 ├── store/              # Zustand store
-├── utils/              # Yardımcı fonksiyonlar
-├── test/               # Test yapılandırması
-├── App.tsx             # Ana uygulama
-└── main.tsx            # Giriş noktası
+├── utils/              # Utility functions
+├── test/               # Test configuration
+├── App.tsx             # Main application
+└── main.tsx            # Entry point
 ```
 
-## Geliştirme
-
-### Test Yazma
+## 🧪 Testing
 
 ```bash
-# Tüm testleri çalıştır
+# Run all tests
 npm test
 
-# Watch modunda testler
+# Run tests in watch mode
 npm run test:watch
 
-# Coverage raporu
+# Generate coverage report
 npm run test:coverage
 ```
 
-### Linting
+## 🔧 Development
+
+### Code Quality
 
 ```bash
-# ESLint kontrolü
+# Run ESLint
 npm run lint
+
+# Format code
+npm run format
 ```
 
-## Lisans
+## 🤝 Contributing
 
-MIT
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Built with ❤️ using React and TypeScript
+- Icons from various emoji sets
+- Inspired by the need for better financial tracking tools
+
+---
+
+<div align="center">
+
+**[⬆ Back to Top](#-installment-tracker)**
+
+Made with ❤️ by [ekaraman89](https://github.com/ekaraman89)
+
+</div>
