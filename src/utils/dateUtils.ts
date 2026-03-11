@@ -46,7 +46,8 @@ export function getNextBusinessDay(date: Date): Date {
 }
 
 /**
- * Calculate payment due date for credit cards: billing cycle date + 10 business days
+ * Calculate payment due date for credit cards: billing cycle date + 10 calendar days
+ * If the 10th day falls on a weekend or holiday, move to the next business day
  * @param billingCycleDate - Day of month (1-31) when billing cycle occurs
  * @param month - The month to calculate for
  * @returns The payment due date
@@ -60,28 +61,25 @@ export function calculatePaymentDueDate(billingCycleDate: number, month: Date): 
   const actualBillingDate = Math.min(clampedDate, daysInMonth);
   
   // Create the billing date
-  let currentDate = new Date(month.getFullYear(), month.getMonth(), actualBillingDate);
+  const billingDate = new Date(month.getFullYear(), month.getMonth(), actualBillingDate);
   
-  // Add 10 business days
-  let businessDaysAdded = 0;
+  // Add 10 calendar days
+  let dueDate = addDays(billingDate, 10);
+  
+  // If the due date falls on a weekend or holiday, move to the next business day
   let iterations = 0;
-  const MAX_ITERATIONS = 50; // Prevent infinite loops
+  const MAX_ITERATIONS = 30; // Prevent infinite loops
   
-  while (businessDaysAdded < 10 && iterations < MAX_ITERATIONS) {
-    currentDate = addDays(currentDate, 1);
-    
-    if (isBusinessDay(currentDate)) {
-      businessDaysAdded++;
-    }
-    
+  while (!isBusinessDay(dueDate) && iterations < MAX_ITERATIONS) {
+    dueDate = addDays(dueDate, 1);
     iterations++;
   }
   
   if (iterations >= MAX_ITERATIONS) {
-    throw new Error('Could not calculate payment due date within 50 days');
+    throw new Error('Could not calculate payment due date within 30 days');
   }
   
-  return currentDate;
+  return dueDate;
 }
 
 /**
@@ -131,7 +129,7 @@ export function generatePaymentSchedule(
     const targetMonth = addMonths(baseMonth, i);
     
     if (card.type === 'credit_card' && card.billingCycleDate) {
-      // For credit cards: billing cycle + 10 business days
+      // For credit cards: billing cycle + 10 calendar days (adjusted to next business day if needed)
       dueDate = calculatePaymentDueDate(card.billingCycleDate, targetMonth);
     } else if (card.type === 'manual' && card.paymentDay) {
       // For manual installments: specific day of month
