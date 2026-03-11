@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useStore } from './store/useStore';
 import type { Card, Installment } from './store/types';
 import { MonthlySummary } from './components/Dashboard/MonthlySummary';
+import { MonthlyInstallmentDetail } from './components/Dashboard/MonthlyInstallmentDetail';
 import { CardFilter } from './components/Cards/CardFilter';
 import { CardList } from './components/Cards/CardList';
 import { InstallmentList } from './components/Installments/InstallmentList';
@@ -67,6 +68,13 @@ function App() {
               month={selectedMonth}
               total={monthlyTotal}
               paymentCount={monthPayments.length}
+            />
+            
+            {/* Monthly Installment Detail */}
+            <MonthlyInstallmentDetail
+              month={selectedMonth}
+              payments={monthPayments}
+              cards={cards}
             />
             
             {/* Card Filter */}
