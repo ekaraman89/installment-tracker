@@ -23,11 +23,11 @@ function App() {
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [editingCard, setEditingCard] = useState<Card | null>(null);
   const [editingInstallment, setEditingInstallment] = useState<Installment | null>(null);
-  
+
   // Test store
-  const { 
-    cards, 
-    installments, 
+  const {
+    cards,
+    installments,
     selectedMonth,
     activeCardFilters,
     getPaymentsForMonth,
@@ -69,14 +69,14 @@ function App() {
               total={monthlyTotal}
               paymentCount={monthPayments.length}
             />
-            
+
             {/* Monthly Installment Detail */}
             <MonthlyInstallmentDetail
               month={selectedMonth}
               payments={monthPayments}
               cards={cards}
             />
-            
+
             {/* Card Filter */}
             <div className="card">
               <CardFilter
@@ -94,7 +94,7 @@ function App() {
               currentMonth={selectedMonth}
               onMonthChange={setSelectedMonth}
             />
-            
+
             {/* Calendar */}
             <CalendarGrid
               month={selectedMonth}
@@ -102,31 +102,6 @@ function App() {
               cards={cards}
               onDayClick={(date) => setSelectedDay(date)}
             />
-            
-            {/* Card List */}
-            <div className="card">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">Kartlarım</h2>
-                <button
-                  onClick={() => {
-                    setEditingCard(null);
-                    setShowCardForm(true);
-                  }}
-                  className="btn-primary btn-sm"
-                >
-                  + Yeni Kart
-                </button>
-              </div>
-              <CardList
-                cards={cards}
-                onEdit={(card) => {
-                  setEditingCard(card);
-                  setShowCardForm(true);
-                }}
-                onDelete={deleteCard}
-              />
-            </div>
-            
             {/* Installment List */}
             <div className="card">
               <div className="flex items-center justify-between mb-4">
@@ -152,37 +127,35 @@ function App() {
                 onDelete={deleteInstallment}
               />
             </div>
+            {/* Card List */}
+            <div className="card">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-900">Kartlarım</h2>
+                <button
+                  onClick={() => {
+                    setEditingCard(null);
+                    setShowCardForm(true);
+                  }}
+                  className="btn-primary btn-sm"
+                >
+                  + Yeni Kart
+                </button>
+              </div>
+              <CardList
+                cards={cards}
+                onEdit={(card) => {
+                  setEditingCard(card);
+                  setShowCardForm(true);
+                }}
+                onDelete={deleteCard}
+              />
+            </div>
+
+
           </div>
         </div>
       </main>
-      
-      {/* Card Form Modal */}
-      {showCardForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              {editingCard ? 'Kart Düzenle' : 'Yeni Kart Ekle'}
-            </h3>
-            <CardForm
-              card={editingCard || undefined}
-              onSubmit={(cardData) => {
-                if (editingCard) {
-                  updateCard(editingCard.id, cardData);
-                } else {
-                  addCard(cardData);
-                }
-                setShowCardForm(false);
-                setEditingCard(null);
-              }}
-              onCancel={() => {
-                setShowCardForm(false);
-                setEditingCard(null);
-              }}
-            />
-          </div>
-        </div>
-      )}
-      
+
       {/* Installment Form Modal */}
       {showInstallmentForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -210,7 +183,35 @@ function App() {
           </div>
         </div>
       )}
-      
+      {/* Card Form Modal */}
+      {showCardForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              {editingCard ? 'Kart Düzenle' : 'Yeni Kart Ekle'}
+            </h3>
+            <CardForm
+              card={editingCard || undefined}
+              onSubmit={(cardData) => {
+                if (editingCard) {
+                  updateCard(editingCard.id, cardData);
+                } else {
+                  addCard(cardData);
+                }
+                setShowCardForm(false);
+                setEditingCard(null);
+              }}
+              onCancel={() => {
+                setShowCardForm(false);
+                setEditingCard(null);
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+
+
       {/* Day Detail Modal */}
       {selectedDay && (
         <DayDetailModal
