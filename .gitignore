@@ -25,3 +25,6 @@ dist-ssr
 
 # Kiro IDE files
 .kiro/
+
+# Graphify
+graphify-out/
